@@ -52,7 +52,8 @@
   align-items: center;
 }
 .controls button {
-  /* width: 50px; */
+  display: flex;
+
   padding: 15px;
   aspect-ratio: 1;
 
@@ -112,10 +113,12 @@
   justify-content: end;
   align-items: center;
   gap: 20px;
+  padding-bottom: 10px;
 }
 .volume input[type="range"] {
   flex-grow: 0.2;
   height: 6px;
+  
 
   background: rgba(255, 255, 255, 0.3);
   border-radius: 5px;
@@ -154,9 +157,10 @@
 .playlist li:hover {
   background: rgba(255, 255, 255, 0.1);
 }
-.playlist li:active {
-  font-weight: 500;
-  background: rgba(255, 255, 255, 0.1);
+.playlist li.active {
+  font-weight: 700;
+  color: indianred;
+  /* background: rgba(255, 255, 255, 0.1); */
 }
 
 /*  */
