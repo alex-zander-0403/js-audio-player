@@ -5,7 +5,7 @@ const pauseBtn = document.getElementById("pause");
 const stopBtn = document.getElementById("stop");
 const nextBtn = document.getElementById("next");
 
-const progressBar = document.getElementById("progress-bar");
+const progressBarEl = document.getElementById("progress-bar");
 const currentTimeEl = document.getElementById("current-time");
 const durationEl = document.getElementById("duration");
 
@@ -48,6 +48,8 @@ function setPlayList() {
     playListEl.append(liEl);
   });
 }
+
+// --------------------------------------
 
 //
 function loadTrack(index) {
@@ -92,8 +94,6 @@ function prevTrack() {
   playTrack();
 }
 
-// --------------------------------------
-
 playBtn.addEventListener("click", () => {
   playTrack();
 });
@@ -110,7 +110,46 @@ prevBtn.addEventListener("click", () => {
   prevTrack();
 });
 
-// установка трека по умолчанию (0) для запуска по playBtn
-loadTrack(currentTrackIndex);
+// --------------------------------------
+
+// текущее время, длительность трека и слайдер прогресса
+function updateProgressBar() {
+  const { currentTime, duration } = audioEl;
+
+  if (isNaN(duration)) return;
+
+  currentTimeEl.textContent = formatTime(currentTime);
+  durationEl.textContent = formatTime(duration);
+
+  const progress = (currentTime / duration) * 100;
+  progressBarEl.value = progress;
+}
+
+// вспомогательная функция форматирования времени
+function formatTime(time) {
+  const minutes = Math.floor(time / 60);
+  // .toString()
+  // .padStart(2, "0");
+  const seconds = Math.floor(time % 60)
+    .toString()
+    .padStart(2, "0");
+  return `${minutes}:${seconds}`;
+}
+
+audioEl.addEventListener("timeupdate", updateProgressBar);
+
+// логика перемотки
+function seekTrack() {
+  audioEl.currentTime = (progressBarEl.value / 100) * audioEl.duration;
+}
+
+progressBarEl.addEventListener("input", seekTrack);
+
+// --------------------------------------
+
 // авто загрузка плейлиста
 setPlayList();
+// установка трека по умолчанию (0) для запуска по playBtn
+loadTrack(currentTrackIndex);
+//
+// updateProgressBar();
