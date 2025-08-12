@@ -1,3 +1,4 @@
+const playListEl = document.getElementById("playlist");
 const audioEl = document.getElementById("audio");
 const prevBtn = document.getElementById("prev");
 const playBtn = document.getElementById("play");
@@ -8,10 +9,8 @@ const nextBtn = document.getElementById("next");
 const progressBarEl = document.getElementById("progress-bar");
 const currentTimeEl = document.getElementById("current-time");
 const durationEl = document.getElementById("duration");
-
-const volumeSlider = document.getElementById("volume-slider");
+const volumeSliderEl = document.getElementById("volume-slider");
 const volumeIcons = document.querySelectorAll(".volume img");
-const playListEl = document.getElementById("playlist");
 
 //
 const tracks = [
@@ -135,7 +134,6 @@ function formatTime(time) {
     .padStart(2, "0");
   return `${minutes}:${seconds}`;
 }
-
 audioEl.addEventListener("timeupdate", updateProgressBar);
 
 // логика перемотки
@@ -147,9 +145,44 @@ progressBarEl.addEventListener("input", seekTrack);
 
 // --------------------------------------
 
+// function updateVolume(volume) {
+//   audioEl.volume = volume;
+// }
+
+// volumeSliderEl.addEventListener("input", () => {
+//   const volume = volumeSliderEl.value;
+//   updateVolume(volume);
+// });
+
+// функция изменения звука
+function updateVolume() {
+  const volume = volumeSliderEl.value;
+  seekVolume(volume);
+}
+
+// логика установки звука
+function seekVolume(volume) {
+  audioEl.volume = volume;
+
+  volumeIcons.forEach((icon, index) => {
+    if (volume < 0.01) {
+      icon.style.display = index === 0 ? "inline" : "none";
+    } else {
+      const iconIndexToShow = Math.min(Math.floor(volume * 3), 2);
+      icon.style.display = index === iconIndexToShow + 1 ? "inline" : "none";
+    }
+  });
+}
+
+volumeSliderEl.addEventListener("input", updateVolume);
+
+// --------------------------------------
+
+// след трек при окончании аудио
+audioEl.addEventListener("ended", nextTrack);
 // авто загрузка плейлиста
 setPlayList();
 // установка трека по умолчанию (0) для запуска по playBtn
 loadTrack(currentTrackIndex);
-//
-// updateProgressBar();
+// перезапуск громкости для определения иконки громкости
+updateVolume(volumeSliderEl.value);
