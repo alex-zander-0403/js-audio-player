@@ -84,12 +84,15 @@ function stopTrack() {
 
 // след трек
 function nextTrack() {
-  loadTrack(currentTrackIndex + 1);
+  const nextIndex = (currentTrackIndex + 1) % tracks.length;
+  loadTrack(nextIndex);
   playTrack();
 }
+
 // пред трек
 function prevTrack() {
-  loadTrack(currentTrackIndex - 1);
+  const prevIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
+  loadTrack(prevIndex);
   playTrack();
 }
 
